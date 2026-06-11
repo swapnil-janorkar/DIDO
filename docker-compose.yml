@@ -1,0 +1,35 @@
+services:
+
+  postgres:
+    image: postgres:17
+    container_name: dido-postgres
+
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: dido
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - dido-postgres-data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  backend:
+    build:
+      context: ./backend
+
+    container_name: dido-api
+
+    ports:
+      - "5000:5000"
+
+    env_file:
+      - ./backend/.env
+
+    depends_on:
+      - postgres
+
+volumes:
+  dido-postgres-data:
