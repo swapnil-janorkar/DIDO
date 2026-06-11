@@ -24,3 +24,39 @@ export const createTask = async (
 
     res.status(201).json(task);
 };
+export const getTaskById = async (
+    req: Request,
+    res: Response
+) => {
+    const task =
+        await taskService.getTaskById(
+            Number(req.params.id)
+        );
+
+    res.json(task);
+};
+
+export const completeTask = async (
+    req: Request,
+    res: Response
+) => {
+    const task =
+        await taskService.completeTask(
+            Number(req.params.id)
+        );
+
+    res.json(task);
+};
+
+export const deleteTask = async (
+    req: Request,
+    res: Response
+) => {
+    await taskService.deleteTask(
+        Number(req.params.id)
+    );
+
+    res.json({
+        message:"Task deleted"
+    });
+};
