@@ -3,3 +3,10 @@ node_modules/
 dist/
 coverage/
 .vscode/
+
+# Next.js
+frontend/.next/
+frontend/out/
+frontend/.vercel
+frontend/next-env.d.ts
+*.local
