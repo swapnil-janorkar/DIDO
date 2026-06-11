@@ -1,9 +1,11 @@
 import express from "express";
+import cors from "cors";
 import { pool } from "./config/db";
 import taskRoutes from "./routes/task.routes";
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 
 app.get("/", async (_, res) => {
