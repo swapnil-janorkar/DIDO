@@ -31,5 +31,17 @@ services:
     depends_on:
       - postgres
 
+  frontend:
+    build:
+      context: ./frontend
+
+    container_name: dido-frontend
+
+    ports:
+      - "3000:3000"
+
+    depends_on:
+      - backend
+
 volumes:
   dido-postgres-data:

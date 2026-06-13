@@ -3,14 +3,7 @@
 import { useEffect, useState } from "react";
 import TaskForm from "../src/components/TaskForm";
 import TaskCard from "../src/components/TaskCard";
-
-interface Task{
-  id:number;
-  title:string;
-  description:string;
-  priority:string;
-  completed:boolean;
-}
+import { Task } from "../src/types/task";
 
 export default function Home(){
 
