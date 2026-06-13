@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import TaskForm from "../src/components/TaskForm";
 
 interface Task{
   id:number;
@@ -72,6 +73,10 @@ export default function Home(){
           </div>
 
         </div>
+
+        <TaskForm
+          onCreated={loadTasks}
+        />
 
         <div className="rounded-xl bg-white p-6 shadow">
 
