@@ -27,35 +27,38 @@ export const createTask = async (
     res.status(201).json(task);
 };
 export const getTaskById = async (
-    req: Request,
+    req: AuthRequest,
     res: Response
 ) => {
     const task =
         await taskService.getTaskById(
-            Number(req.params.id)
+            Number(req.params.id),
+            req.user!.id
         );
 
     res.json(task);
 };
 
 export const completeTask = async (
-    req: Request,
+    req: AuthRequest,
     res: Response
 ) => {
     const task =
         await taskService.completeTask(
-            Number(req.params.id)
+            Number(req.params.id),
+            req.user!.id
         );
 
     res.json(task);
 };
 
 export const deleteTask = async (
-    req: Request,
+    req: AuthRequest,
     res: Response
 ) => {
     await taskService.deleteTask(
-        Number(req.params.id)
+        Number(req.params.id),
+        req.user!.id
     );
 
     res.json({
