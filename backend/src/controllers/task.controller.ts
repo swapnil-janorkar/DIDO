@@ -36,6 +36,12 @@ export const getTaskById = async (
             req.user!.id
         );
 
+    if(!task){
+        return res.status(404).json({
+            message:"Task not found"
+        });
+    }
+
     res.json(task);
 };
 
@@ -49,6 +55,12 @@ export const completeTask = async (
             req.user!.id
         );
 
+    if(!task){
+        return res.status(404).json({
+            message:"Task not found"
+        });
+    }
+
     res.json(task);
 };
 
@@ -56,10 +68,17 @@ export const deleteTask = async (
     req: AuthRequest,
     res: Response
 ) => {
-    await taskService.deleteTask(
-        Number(req.params.id),
-        req.user!.id
-    );
+    const deleted =
+        await taskService.deleteTask(
+            Number(req.params.id),
+            req.user!.id
+        );
+
+    if(!deleted){
+        return res.status(404).json({
+            message:"Task not found"
+        });
+    }
 
     res.json({
         message:"Task deleted"

@@ -31,6 +31,8 @@ export const getTaskById = async (id: number, userId: number) => {
         [id, userId]
     );
 
+    if(r.rowCount === 0) return null;
+
     return r.rows[0];
 };
 
@@ -44,12 +46,18 @@ export const completeTask = async (id: number, userId: number) => {
         [id, userId]
     );
 
+    if(r.rowCount === 0) return null;
+
     return r.rows[0];
 };
 
 export const deleteTask = async (id: number, userId: number) => {
-    await pool.query(
+    const r = await pool.query(
         "DELETE FROM tasks WHERE id=$1 AND user_id=$2",
         [id, userId]
     );
+
+    if(r.rowCount === 0) return null;
+
+    return true;
 };
