@@ -15,14 +15,12 @@ export default function TaskCard({
 }:Props){
 
     return(
-        <div className="border rounded p-4 mb-3">
+        <div className="rounded-lg border p-4">
             <h3 className="font-bold">
                 {task.title}
             </h3>
 
-            <p>
-                {task.description}
-            </p>
+            <p>{task.description}</p>
 
             <p>
                 Priority: {task.priority}
@@ -35,24 +33,29 @@ export default function TaskCard({
                     : " Pending"}
             </p>
 
-            {!task.completed&&(
+            <div className="mt-3 flex gap-2">
+
+                {!task.completed && (
+                    <button
+                        className="rounded bg-green-600 px-3 py-1 text-white"
+                        onClick={()=>
+                            onComplete(task.id)
+                        }
+                    >
+                        Complete
+                    </button>
+                )}
+
                 <button
-                    className="mr-2"
+                    className="rounded bg-red-600 px-3 py-1 text-white"
                     onClick={()=>
-                        onComplete(task.id)
+                        onDelete(task.id)
                     }
                 >
-                    Complete
+                    Delete
                 </button>
-            )}
 
-            <button
-                onClick={()=>
-                    onDelete(task.id)
-                }
-            >
-                Delete
-            </button>
+            </div>
         </div>
     );
 }

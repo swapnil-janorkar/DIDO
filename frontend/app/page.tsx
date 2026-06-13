@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import TaskForm from "../src/components/TaskForm";
+import TaskCard from "../src/components/TaskCard";
 
 interface Task{
   id:number;
@@ -23,6 +24,28 @@ export default function Home(){
     const data=await r.json();
 
     setTasks(data);
+  };
+
+  const completeTask=async(id:number)=>{
+    await fetch(
+      `http://localhost:5000/tasks/${id}/complete`,
+      {
+        method:"PATCH"
+      }
+    );
+
+    loadTasks();
+  };
+
+  const deleteTask=async(id:number)=>{
+    await fetch(
+      `http://localhost:5000/tasks/${id}`,
+      {
+        method:"DELETE"
+      }
+    );
+
+    loadTasks();
   };
 
   useEffect(()=>{
@@ -88,31 +111,12 @@ export default function Home(){
 
             {
               tasks.map(task=>(
-                <div
+                <TaskCard
                   key={task.id}
-                  className="rounded-lg border p-4"
-                >
-                  <h3 className="font-bold">
-                    {task.title}
-                  </h3>
-
-                  <p>
-                    {task.description}
-                  </p>
-
-                  <p>
-                    Priority: {task.priority}
-                  </p>
-
-                  <p>
-                    Status:
-                    {
-                      task.completed
-                        ? " Completed"
-                        : " Pending"
-                    }
-                  </p>
-                </div>
+                  task={task}
+                  onComplete={completeTask}
+                  onDelete={deleteTask}
+                />
               ))
             }
 
