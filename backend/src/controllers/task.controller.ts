@@ -1,16 +1,17 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import * as taskService from "../services/task.service";
+import { AuthRequest } from "../auth/auth.middleware";
 
 export const getTasks = async (
-    _: Request,
+    req: AuthRequest,
     res: Response
 ) => {
-    const tasks = await taskService.getTasks();
+    const tasks = await taskService.getTasks(req.user!.id);
     res.json(tasks);
 };
 
 export const createTask = async (
-    req: Request,
+    req: AuthRequest,
     res: Response
 ) => {
     const { title, description, priority } = req.body;
@@ -19,7 +20,8 @@ export const createTask = async (
         await taskService.createTask(
             title,
             description,
-            priority
+            priority,
+            req.user!.id
         );
 
     res.status(201).json(task);

@@ -1,8 +1,9 @@
 import { pool } from "../config/db";
 
-export const getTasks = async () => {
+export const getTasks = async (userId: number) => {
     const r = await pool.query(
-        "SELECT * FROM tasks ORDER BY id"
+        "SELECT * FROM tasks WHERE user_id=$1 ORDER BY id",
+        [userId]
     );
 
     return r.rows;
@@ -11,14 +12,15 @@ export const getTasks = async () => {
 export const createTask = async (
     title: string,
     description: string,
-    priority: string
+    priority: string,
+    userId: number
 ) => {
     const r = await pool.query(
         `INSERT INTO tasks
-        (title,description,priority)
-        VALUES($1,$2,$3)
+        (title,description,priority,user_id)
+        VALUES($1,$2,$3,$4)
         RETURNING *`,
-        [title, description, priority]
+        [title, description, priority, userId]
     );
 
     return r.rows[0];
