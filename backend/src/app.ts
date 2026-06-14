@@ -3,6 +3,7 @@ import cors from "cors";
 import { pool } from "./config/db";
 import taskRoutes from "./routes/task.routes";
 import authRoutes from "./auth/auth.routes";
+import analyticsRoutes from "./routes/analytics.routes";
 
 const app = express();
 
@@ -22,5 +23,6 @@ app.get("/", async (_, res) => {
 
 app.use("/tasks", taskRoutes);
 app.use("/auth", authRoutes);
+app.use("/analytics", analyticsRoutes);
 
 export default app;

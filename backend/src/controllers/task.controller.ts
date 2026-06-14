@@ -5,7 +5,7 @@ import { AuthRequest } from "../auth/auth.middleware";
 export const getTasks = async (
     req: AuthRequest,
     res: Response
-) => {
+): Promise<void> => {
     const tasks = await taskService.getTasks(req.user!.id);
     res.json(tasks);
 };
@@ -13,7 +13,7 @@ export const getTasks = async (
 export const createTask = async (
     req: AuthRequest,
     res: Response
-) => {
+): Promise<void> => {
     const { title, description, priority } = req.body;
 
     const task =
@@ -26,10 +26,11 @@ export const createTask = async (
 
     res.status(201).json(task);
 };
+
 export const getTaskById = async (
     req: AuthRequest,
     res: Response
-) => {
+): Promise<void> => {
     const task =
         await taskService.getTaskById(
             Number(req.params.id),
@@ -37,9 +38,10 @@ export const getTaskById = async (
         );
 
     if(!task){
-        return res.status(404).json({
+        res.status(404).json({
             message:"Task not found"
         });
+        return;
     }
 
     res.json(task);
@@ -48,7 +50,7 @@ export const getTaskById = async (
 export const completeTask = async (
     req: AuthRequest,
     res: Response
-) => {
+): Promise<void> => {
     const task =
         await taskService.completeTask(
             Number(req.params.id),
@@ -56,9 +58,10 @@ export const completeTask = async (
         );
 
     if(!task){
-        return res.status(404).json({
+        res.status(404).json({
             message:"Task not found"
         });
+        return;
     }
 
     res.json(task);
@@ -67,7 +70,7 @@ export const completeTask = async (
 export const deleteTask = async (
     req: AuthRequest,
     res: Response
-) => {
+): Promise<void> => {
     const deleted =
         await taskService.deleteTask(
             Number(req.params.id),
@@ -75,9 +78,10 @@ export const deleteTask = async (
         );
 
     if(!deleted){
-        return res.status(404).json({
+        res.status(404).json({
             message:"Task not found"
         });
+        return;
     }
 
     res.json({
