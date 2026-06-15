@@ -5,7 +5,8 @@ import * as analyticsService from "../services/analytics.service";
 export const getProductivity = async (
     req:AuthRequest,
     res:Response
-)=>{
+):Promise<void> => {
+
     const data =
         await analyticsService.getProductivity(
             req.user!.id

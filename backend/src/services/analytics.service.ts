@@ -11,38 +11,52 @@ export const getProductivity = async (
     userId:number
 ) => {
 
-    const r = await pool.query(
-        `SELECT priority,completed
-         FROM tasks
-         WHERE user_id=$1`,
+    const result = await pool.query(
+        `
+        SELECT *
+        FROM tasks
+        WHERE user_id=$1
+        `,
         [userId]
     );
 
-    let total = 0;
-    let completed = 0;
+    const tasks = result.rows;
 
-    for(const task of r.rows){
+    let totalPoints = 0;
+    let completedPoints = 0;
+    let completedTasks = 0;
+
+    for(const task of tasks){
 
         const points =
             weights[task.priority] || 1;
 
-        total += points;
+        totalPoints += points;
 
         if(task.completed){
-            completed += points;
+
+            completedTasks++;
+
+            completedPoints += points;
         }
     }
 
+    const pendingTasks =
+        tasks.length - completedTasks;
+
     const score =
-        total === 0
+        totalPoints === 0
             ? 0
             : Math.round(
-                (completed/total)*100
-              );
+                (completedPoints/totalPoints)*100
+            );
 
     return {
         score,
-        completedPoints:completed,
-        totalPoints:total
+        totalTasks: tasks.length,
+        completedTasks,
+        pendingTasks,
+        completedPoints,
+        totalPoints
     };
 };

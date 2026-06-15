@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { createTask } from "../services/taskApi";
 
 interface Props{
     onCreated:()=>void;
@@ -18,21 +19,11 @@ export default function TaskForm({
     )=>{
         e.preventDefault();
 
-        await fetch(
-            "http://localhost:5000/tasks",
-            {
-                method:"POST",
-                headers:{
-                    "Content-Type":
-                    "application/json"
-                },
-                body:JSON.stringify({
+        await createTask({
                     title,
                     description,
                     priority:"HIGH"
-                })
-            }
-        );
+                });
 
         setTitle("");
         setDescription("");
