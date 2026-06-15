@@ -1,18 +1,13 @@
-name: DIDO CI
+name: DIDO CI/CD
 
-"on":
+on:
   push:
-    branches:
-      - main
-
-  pull_request:
     branches:
       - main
 
 jobs:
 
   backend:
-
     runs-on: ubuntu-latest
 
     defaults:
@@ -20,7 +15,6 @@ jobs:
         working-directory: backend
 
     steps:
-
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
@@ -32,7 +26,6 @@ jobs:
       - run: npm run build
 
   frontend:
-
     runs-on: ubuntu-latest
 
     defaults:
@@ -40,7 +33,6 @@ jobs:
         working-directory: frontend
 
     steps:
-
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
@@ -50,3 +42,42 @@ jobs:
       - run: npm install
 
       - run: npm run build
+
+  docker:
+
+    needs:
+      - backend
+      - frontend
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - uses: actions/checkout@v4
+
+      - uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+
+      - name: Build Backend Image
+        run: |
+          docker build \
+          -t swap2502/dido-backend:latest \
+          ./backend
+
+      - name: Push Backend Image
+        run: |
+          docker push \
+          swap2502/dido-backend:latest
+
+      - name: Build Frontend Image
+        run: |
+          docker build \
+          -t swap2502/dido-frontend:latest \
+          ./frontend
+
+      - name: Push Frontend Image
+        run: |
+          docker push \
+          swap2502/dido-frontend:latest
