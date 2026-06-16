@@ -13,10 +13,34 @@ export default function Home(){
   const [email,setEmail]=useState("");
   const [password,setPassword]=useState("");
   const [loginError,setLoginError]=useState("");
+  const [analytics,setAnalytics]=useState({
+    score:0,
+    totalTasks:0,
+    completedTasks:0,
+    pendingTasks:0,
+    completedPoints:0,
+    totalPoints:0
+  });
 
   const loadTasks=async()=>{
-    const data=await taskApi.getTasks();
-    setTasks(Array.isArray(data) ? data : []);
+
+    const data=
+      await taskApi.getTasks();
+
+    setTasks(
+      Array.isArray(data)
+        ? data
+        : []
+    );
+
+    await loadAnalytics();
+  };
+
+  const loadAnalytics=async()=>{
+    const data=
+      await taskApi.getAnalytics();
+
+    setAnalytics(data);
   };
 
   const handleLogin=async(
@@ -121,34 +145,33 @@ export default function Home(){
           </button>
         </div>
 
-        <div className="mb-8 grid grid-cols-3 gap-4">
+        <div className="mb-8 grid grid-cols-4 gap-4">
+
+          <div className="rounded-xl bg-white p-6 shadow">
+            <h2>Productivity</h2>
+            <p className="text-3xl font-bold">
+              {analytics.score}%
+            </p>
+          </div>
 
           <div className="rounded-xl bg-white p-6 shadow">
             <h2>Total Tasks</h2>
             <p className="text-3xl font-bold">
-              {tasks.length}
+              {analytics.totalTasks}
             </p>
           </div>
 
           <div className="rounded-xl bg-white p-6 shadow">
             <h2>Completed</h2>
             <p className="text-3xl font-bold">
-              {
-                tasks.filter(
-                  t=>t.completed
-                ).length
-              }
+              {analytics.completedTasks}
             </p>
           </div>
 
           <div className="rounded-xl bg-white p-6 shadow">
             <h2>Pending</h2>
             <p className="text-3xl font-bold">
-              {
-                tasks.filter(
-                  t=>!t.completed
-                ).length
-              }
+              {analytics.pendingTasks}
             </p>
           </div>
 

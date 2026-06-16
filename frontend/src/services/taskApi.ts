@@ -15,13 +15,26 @@ export const login=async(
 )=>{
     const r=await fetch(`${AUTH_URL}/login`,{
         method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({email,password})
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+            email,
+            password
+        })
     });
+
     const data=await r.json();
+
+    console.log("LOGIN RESPONSE",data);
+
     if(data.token){
-        localStorage.setItem("token",data.token);
+        localStorage.setItem(
+            "token",
+            data.token
+        );
     }
+
     return data;
 };
 
@@ -57,4 +70,15 @@ export const deleteTask=async(id:number)=>{
         method:"DELETE",
         headers:authHeaders()
     });
+};
+
+export const getAnalytics = async () => {
+    const r = await fetch(
+        "http://localhost:5000/analytics/productivity",
+        {
+            headers: authHeaders()
+        }
+    );
+
+    return r.json();
 };
