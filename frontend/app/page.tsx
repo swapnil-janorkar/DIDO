@@ -145,6 +145,10 @@ export default function Home(){
           </button>
         </div>
 
+        <pre>
+          {JSON.stringify(analytics,null,2)}
+        </pre>
+
         <div className="mb-8 grid grid-cols-4 gap-4">
 
           <div className="rounded-xl bg-white p-6 shadow">
