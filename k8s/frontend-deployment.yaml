@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: dido-frontend
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: dido-frontend
+
+  template:
+    metadata:
+      labels:
+        app: dido-frontend
+
+    spec:
+      containers:
+      - name: frontend
+
+        image: swap2502/dido-frontend:latest
+
+        ports:
+        - containerPort: 3000

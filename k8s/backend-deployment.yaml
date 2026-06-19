@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: dido-backend
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: dido-backend
+
+  template:
+    metadata:
+      labels:
+        app: dido-backend
+
+    spec:
+      containers:
+      - name: backend
+
+        image: swap2502/dido-backend:latest
+
+        ports:
+        - containerPort: 5000
+
+        env:
+        - name: PORT
+          value: "5000"
+
+        - name: DB_HOST
+          value: "postgres"
+
+        - name: DB_PORT
+          value: "5432"
+
+        - name: DB_USER
+          value: "postgres"
+
+        - name: DB_PASSWORD
+          value: "postgres"
+
+        - name: DB_NAME
+          value: "dido"
