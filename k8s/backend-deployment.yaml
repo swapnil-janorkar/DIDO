@@ -25,21 +25,9 @@ spec:
         ports:
         - containerPort: 5000
 
-        env:
-        - name: PORT
-          value: "5000"
+        envFrom:
+        - configMapRef:
+            name: dido-config
 
-        - name: DB_HOST
-          value: "postgres"
-
-        - name: DB_PORT
-          value: "5432"
-
-        - name: DB_USER
-          value: "postgres"
-
-        - name: DB_PASSWORD
-          value: "postgres"
-
-        - name: DB_NAME
-          value: "dido"
+        - secretRef:
+            name: dido-secret
