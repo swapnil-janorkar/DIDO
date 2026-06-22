@@ -21,6 +21,7 @@ spec:
       - name: backend
 
         image: swap2502/dido-backend:latest
+        imagePullPolicy: Always
 
         ports:
         - containerPort: 5000

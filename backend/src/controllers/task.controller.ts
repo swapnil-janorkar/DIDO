@@ -14,13 +14,23 @@ export const createTask = async (
     req: AuthRequest,
     res: Response
 ): Promise<void> => {
-    const { title, description, priority } = req.body;
+    const {
+        title,
+        description,
+        priority,
+        due_date,
+        category,
+        estimated_duration
+    } = req.body;
 
     const task =
         await taskService.createTask(
             title,
             description,
             priority,
+            due_date,
+            category,
+            estimated_duration,
             req.user!.id
         );
 
