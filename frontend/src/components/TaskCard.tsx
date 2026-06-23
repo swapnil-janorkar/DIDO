@@ -2,73 +2,84 @@
 
 import { Task } from "../types/task";
 
-interface Props{
-    task:Task;
-    onComplete:(id:number)=>void;
-    onDelete:(id:number)=>void;
+interface Props {
+    task: Task;
+    onComplete: (id: number) => void;
+    onDelete: (id: number) => void;
+    onEdit: (task: Task) => void;
 }
 
 export default function TaskCard({
     task,
     onComplete,
-    onDelete
-}:Props){
+    onDelete,
+    onEdit
+}: Props) {
 
-    return(
+    return (
         <div className="rounded-lg border p-4">
-            <h3 className="font-bold">
+            <h3 className="font-bold text-lg mb-2">
                 {task.title}
             </h3>
 
-            <p>{task.description}</p>
-
-            <p>
-                Priority: {task.priority}
-            </p>
-
-            <p>
-                Status:
-                {task.completed
-                    ? " Completed"
-                    : " Pending"}
-            </p>
-
-            {task.category && (
-                <p>
-                    Category: {task.category}
+            {task.description && (
+                <p className="text-sm text-gray-600 mb-3">
+                    {task.description}
                 </p>
             )}
 
-            {task.due_date && (
+            <div className="space-y-1 text-sm">
                 <p>
-                    Due: {new Date(task.due_date).toLocaleDateString()}
+                    <span className="font-medium">Priority:</span> {task.priority}
                 </p>
-            )}
 
-            {task.estimated_duration != null && (
+                {task.category && (
+                    <p>
+                        <span className="font-medium">Category:</span> {task.category}
+                    </p>
+                )}
+
+                {task.due_date && (
+                    <p>
+                        <span className="font-medium">Due Date:</span>{" "}
+                        {new Date(task.due_date).toLocaleDateString()}
+                    </p>
+                )}
+
+                {task.estimated_duration != null && (
+                    <p>
+                        <span className="font-medium">Duration:</span>{" "}
+                        {task.estimated_duration} min
+                    </p>
+                )}
+
                 <p>
-                    Est. Duration: {task.estimated_duration} min
+                    <span className="font-medium">Status:</span>{" "}
+                    {task.completed ? "✅ Completed" : "⏳ Pending"}
                 </p>
-            )}
+            </div>
 
-            <div className="mt-3 flex gap-2">
+            <div className="mt-4 flex gap-2">
 
                 {!task.completed && (
                     <button
-                        className="rounded bg-green-600 px-3 py-1 text-white"
-                        onClick={()=>
-                            onComplete(task.id)
-                        }
+                        className="rounded bg-green-600 px-3 py-1 text-sm text-white hover:bg-green-700"
+                        onClick={() => onComplete(task.id)}
                     >
                         Complete
                     </button>
                 )}
 
                 <button
-                    className="rounded bg-red-600 px-3 py-1 text-white"
-                    onClick={()=>
-                        onDelete(task.id)
-                    }
+                    className="rounded bg-blue-600 px-3 py-1 text-sm text-white hover:bg-blue-700"
+                    onClick={() => onEdit(task)}
+                >
+                    Edit
+                </button>
+
+                <button
+                    className="rounded bg-red-600 px-3 py-1 text-sm text-white hover:bg-red-700"
+                    onClick={() => onDelete(task.id)}
                 >
                     Delete
                 </button>

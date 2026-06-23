@@ -85,3 +85,30 @@ export const getAnalytics = async () => {
 
     return r.json();
 };
+
+export const getWeeklyAnalytics = async () => {
+    const r = await fetch(
+        "http://localhost:5000/analytics/weekly",
+        {
+            headers: authHeaders()
+        }
+    );
+
+    return r.json();
+};
+
+export const updateTask = async (
+    id: number,
+    task: any
+) => {
+    const r = await fetch(
+        `${API_URL}/${id}`,
+        {
+            method: "PATCH",
+            headers: authHeaders(),
+            body: JSON.stringify(task)
+        }
+    );
+
+    return r.json();
+};
