@@ -33,6 +33,24 @@ export default function TaskCard({
                     : " Pending"}
             </p>
 
+            {task.category && (
+                <p>
+                    Category: {task.category}
+                </p>
+            )}
+
+            {task.due_date && (
+                <p>
+                    Due: {new Date(task.due_date).toLocaleDateString()}
+                </p>
+            )}
+
+            {task.estimated_duration != null && (
+                <p>
+                    Est. Duration: {task.estimated_duration} min
+                </p>
+            )}
+
             <div className="mt-3 flex gap-2">
 
                 {!task.completed && (
