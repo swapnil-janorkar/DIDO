@@ -50,7 +50,7 @@ export const getTaskById = async (id: number, userId: number) => {
         [id, userId]
     );
 
-    if(r.rowCount === 0) return null;
+    if (r.rowCount === 0) return null;
 
     return r.rows[0];
 };
@@ -65,7 +65,7 @@ export const completeTask = async (id: number, userId: number) => {
         [id, userId]
     );
 
-    if(r.rowCount === 0) return null;
+    if (r.rowCount === 0) return null;
 
     return r.rows[0];
 };
@@ -76,7 +76,52 @@ export const deleteTask = async (id: number, userId: number) => {
         [id, userId]
     );
 
-    if(r.rowCount === 0) return null;
+    if (r.rowCount === 0) return null;
 
     return true;
+};
+
+export const updateTask = async (
+    id: number,
+    userId: number,
+    data: any
+) => {
+    const {
+        title,
+        description,
+        priority,
+        due_date,
+        category,
+        estimated_duration
+    } = data;
+
+    const r = await pool.query(
+        `
+        UPDATE tasks
+        SET
+            title=$1,
+            description=$2,
+            priority=$3,
+            due_date=$4,
+            category=$5,
+            estimated_duration=$6
+        WHERE id=$7
+        AND user_id=$8
+        RETURNING *
+        `,
+        [
+            title,
+            description,
+            priority,
+            due_date,
+            category,
+            estimated_duration,
+            id,
+            userId
+        ]
+    );
+
+    if (r.rowCount === 0) return null;
+
+    return r.rows[0];
 };

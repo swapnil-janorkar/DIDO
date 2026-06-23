@@ -20,6 +20,11 @@ router.patch(
     taskController.completeTask
 );
 
+router.patch(
+    "/:id",
+    taskController.updateTask
+);
+
 router.delete(
     "/:id",
     taskController.deleteTask
