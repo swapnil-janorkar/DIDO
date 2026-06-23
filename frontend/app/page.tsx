@@ -25,7 +25,7 @@ export default function Home() {
   });
 
   // Weekly analytics
-  const [weekly, setWeekly] = useState({
+  const [weeklyAnalytics, setWeeklyAnalytics] = useState({
     tasksCreated: 0,
     completedTasks: 0,
     completionRate: 0,
@@ -57,7 +57,7 @@ export default function Home() {
 
   const loadWeeklyAnalytics = async () => {
     const data = await taskApi.getWeeklyAnalytics();
-    setWeekly(data);
+    setWeeklyAnalytics(data);
   };
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -206,23 +206,31 @@ export default function Home() {
         <div className="mb-8 grid grid-cols-4 gap-4">
 
           <div className="rounded-xl bg-white p-6 shadow">
-            <h3 className="text-sm text-zinc-500">Tasks Created</h3>
-            <p className="text-3xl font-bold">{weekly.tasksCreated}</p>
+            <h2>Created This Week</h2>
+            <p className="text-3xl font-bold">
+              {weeklyAnalytics.tasksCreated}
+            </p>
           </div>
 
           <div className="rounded-xl bg-white p-6 shadow">
-            <h3 className="text-sm text-zinc-500">Completed</h3>
-            <p className="text-3xl font-bold">{weekly.completedTasks}</p>
+            <h2>Completed This Week</h2>
+            <p className="text-3xl font-bold">
+              {weeklyAnalytics.completedTasks}
+            </p>
           </div>
 
           <div className="rounded-xl bg-white p-6 shadow">
-            <h3 className="text-sm text-zinc-500">Completion Rate</h3>
-            <p className="text-3xl font-bold">{weekly.completionRate}%</p>
+            <h2>Completion Rate</h2>
+            <p className="text-3xl font-bold">
+              {weeklyAnalytics.completionRate}%
+            </p>
           </div>
 
           <div className="rounded-xl bg-white p-6 shadow">
-            <h3 className="text-sm text-zinc-500">Est. Duration</h3>
-            <p className="text-3xl font-bold">{weekly.totalEstimatedDuration}<span className="text-base font-normal"> min</span></p>
+            <h2>Estimated Time</h2>
+            <p className="text-3xl font-bold">
+              {weeklyAnalytics.totalEstimatedDuration} min
+            </p>
           </div>
 
         </div>
