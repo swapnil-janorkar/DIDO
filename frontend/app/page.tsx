@@ -27,9 +27,9 @@ export default function Home() {
   // Weekly analytics
   const [weekly, setWeekly] = useState({
     tasksCreated: 0,
-    completedThisWeek: 0,
+    completedTasks: 0,
     completionRate: 0,
-    estimatedDuration: 0
+    totalEstimatedDuration: 0
   });
 
   // Edit state
@@ -212,7 +212,7 @@ export default function Home() {
 
           <div className="rounded-xl bg-white p-6 shadow">
             <h3 className="text-sm text-zinc-500">Completed</h3>
-            <p className="text-3xl font-bold">{weekly.completedThisWeek}</p>
+            <p className="text-3xl font-bold">{weekly.completedTasks}</p>
           </div>
 
           <div className="rounded-xl bg-white p-6 shadow">
@@ -222,7 +222,7 @@ export default function Home() {
 
           <div className="rounded-xl bg-white p-6 shadow">
             <h3 className="text-sm text-zinc-500">Est. Duration</h3>
-            <p className="text-3xl font-bold">{weekly.estimatedDuration}<span className="text-base font-normal"> min</span></p>
+            <p className="text-3xl font-bold">{weekly.totalEstimatedDuration}<span className="text-base font-normal"> min</span></p>
           </div>
 
         </div>
