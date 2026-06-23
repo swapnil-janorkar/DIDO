@@ -60,3 +60,49 @@ export const getProductivity = async (
         totalPoints
     };
 };
+
+export const getWeeklyAnalytics = async (
+    userId:number
+) => {
+
+    const result = await pool.query(
+        `
+        SELECT *
+        FROM tasks
+        WHERE user_id=$1
+        AND created_at >= NOW() - INTERVAL '7 days'
+        `,
+        [userId]
+    );
+
+    const tasks = result.rows;
+
+    const tasksCreated =
+        tasks.length;
+
+    const completedTasks =
+        tasks.filter(
+            task => task.completed
+        ).length;
+
+    const completionRate =
+        tasksCreated === 0
+            ? 0
+            : Math.round(
+                (completedTasks/tasksCreated)*100
+            );
+
+    const totalEstimatedDuration =
+        tasks.reduce(
+            (sum, task) =>
+                sum + (task.estimated_duration || 0),
+            0
+        );
+
+    return {
+        tasksCreated,
+        completedTasks,
+        completionRate,
+        totalEstimatedDuration
+    };
+};

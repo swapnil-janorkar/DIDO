@@ -11,4 +11,9 @@ router.get(
     analyticsController.getProductivity
 );
 
+router.get(
+    "/weekly",
+    analyticsController.getWeeklyAnalytics
+);
+
 export default router;

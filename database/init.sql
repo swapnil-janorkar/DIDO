@@ -18,3 +18,9 @@ CREATE TABLE IF NOT EXISTS tasks(
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     user_id INTEGER REFERENCES users(id)
 );
+
+-- Migration guards: safely add columns if they were missing from an older DB instance.
+-- These are idempotent and safe to run on every container start.
+ALTER TABLE tasks ADD COLUMN IF NOT EXISTS due_date DATE;
+ALTER TABLE tasks ADD COLUMN IF NOT EXISTS category VARCHAR(50);
+ALTER TABLE tasks ADD COLUMN IF NOT EXISTS estimated_duration INTEGER;

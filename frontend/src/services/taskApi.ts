@@ -49,6 +49,9 @@ export const createTask=async(task:{
     title:string;
     description:string;
     priority:string;
+    due_date?:string;
+    category?:string;
+    estimated_duration?:number;
 })=>{
     const r=await fetch(API_URL,{
         method:"POST",

@@ -14,3 +14,16 @@ export const getProductivity = async (
 
     res.json(data);
 };
+
+export const getWeeklyAnalytics = async (
+    req:AuthRequest,
+    res:Response
+):Promise<void> => {
+
+    const data =
+        await analyticsService.getWeeklyAnalytics(
+            req.user!.id
+        );
+
+    res.json(data);
+};
