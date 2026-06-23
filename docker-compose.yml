@@ -31,6 +31,10 @@ services:
     depends_on:
       - postgres
 
+    volumes:
+      - ./backend/src:/app/src          # hot-reload: host src → container
+      - /app/node_modules               # keep container's node_modules intact
+
   frontend:
     build:
       context: ./frontend
@@ -43,5 +47,11 @@ services:
     depends_on:
       - backend
 
+    volumes:
+      - ./frontend/src:/app/src         # hot-reload: host src → container
+      - ./frontend/app:/app/app         # Next.js App Router pages
+      - /app/node_modules               # keep container's node_modules intact
+      - /app/.next                      # keep Next.js build cache in container
+
 volumes:
-  dido-postgres-data:
+  dido-postgres-data:
