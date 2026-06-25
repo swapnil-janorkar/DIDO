@@ -32,6 +32,10 @@ export default function Home() {
     totalEstimatedDuration: 0
   });
 
+  // Filter state
+  const [statusFilter, setStatusFilter] = useState("ALL");
+  const [priorityFilter, setPriorityFilter] = useState("ALL");
+
   // Edit state
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [editForm, setEditForm] = useState({
@@ -242,16 +246,48 @@ export default function Home() {
         <div className="rounded-xl bg-white p-6 shadow">
           <h2 className="mb-4 text-2xl font-semibold">Tasks</h2>
 
+          {/* Filter Controls */}
+          <div className="mb-4 flex gap-4">
+            <select
+              className="rounded border p-2 text-sm"
+              value={statusFilter}
+              onChange={e => setStatusFilter(e.target.value)}
+            >
+              <option value="ALL">All</option>
+              <option value="PENDING">Pending</option>
+              <option value="COMPLETED">Completed</option>
+            </select>
+
+            <select
+              className="rounded border p-2 text-sm"
+              value={priorityFilter}
+              onChange={e => setPriorityFilter(e.target.value)}
+            >
+              <option value="ALL">All Priorities</option>
+              <option value="CRITICAL">Critical</option>
+              <option value="HIGH">High</option>
+              <option value="MEDIUM">Medium</option>
+              <option value="LOW">Low</option>
+            </select>
+          </div>
+
           <div className="space-y-4">
-            {tasks.map(task => (
-              <TaskCard
-                key={task.id}
-                task={task}
-                onComplete={completeTask}
-                onDelete={deleteTask}
-                onEdit={openEdit}
-              />
-            ))}
+            {tasks
+              .filter(task => {
+                if (statusFilter === "COMPLETED" && !task.completed) return false;
+                if (statusFilter === "PENDING" && task.completed) return false;
+                if (priorityFilter !== "ALL" && task.priority !== priorityFilter) return false;
+                return true;
+              })
+              .map(task => (
+                <TaskCard
+                  key={task.id}
+                  task={task}
+                  onComplete={completeTask}
+                  onDelete={deleteTask}
+                  onEdit={openEdit}
+                />
+              ))}
           </div>
         </div>
 
