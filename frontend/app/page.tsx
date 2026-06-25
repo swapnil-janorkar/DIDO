@@ -36,6 +36,9 @@ export default function Home() {
   const [statusFilter, setStatusFilter] = useState("ALL");
   const [priorityFilter, setPriorityFilter] = useState("ALL");
 
+  // Sort state
+  const [sortBy, setSortBy] = useState("CREATED");
+
   // Edit state
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [editForm, setEditForm] = useState({
@@ -269,17 +272,47 @@ export default function Home() {
               <option value="MEDIUM">Medium</option>
               <option value="LOW">Low</option>
             </select>
+
+            <select
+              className="rounded border p-2 text-sm"
+              value={sortBy}
+              onChange={e => setSortBy(e.target.value)}
+            >
+              <option value="CREATED">Newest First</option>
+              <option value="DUE_DATE">Due Date</option>
+              <option value="PRIORITY">Priority</option>
+            </select>
           </div>
 
           <div className="space-y-4">
-            {tasks
-              .filter(task => {
+            {(() => {
+              const filteredTasks = tasks.filter(task => {
                 if (statusFilter === "COMPLETED" && !task.completed) return false;
                 if (statusFilter === "PENDING" && task.completed) return false;
                 if (priorityFilter !== "ALL" && task.priority !== priorityFilter) return false;
                 return true;
-              })
-              .map(task => (
+              });
+
+              const sortedTasks = [...filteredTasks];
+
+              if (sortBy === "PRIORITY") {
+                const order = { CRITICAL: 4, HIGH: 3, MEDIUM: 2, LOW: 1 };
+                sortedTasks.sort(
+                  (a, b) =>
+                    order[b.priority as keyof typeof order] -
+                    order[a.priority as keyof typeof order]
+                );
+              } else if (sortBy === "DUE_DATE") {
+                sortedTasks.sort(
+                  (a, b) =>
+                    new Date(a.due_date ?? "9999-12-31").getTime() -
+                    new Date(b.due_date ?? "9999-12-31").getTime()
+                );
+              } else {
+                sortedTasks.sort((a, b) => b.id - a.id);
+              }
+
+              return sortedTasks.map(task => (
                 <TaskCard
                   key={task.id}
                   task={task}
@@ -287,7 +320,8 @@ export default function Home() {
                   onDelete={deleteTask}
                   onEdit={openEdit}
                 />
-              ))}
+              ));
+            })()}
           </div>
         </div>
 
