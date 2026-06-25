@@ -1,10 +1,22 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import TaskForm from "../src/components/TaskForm";
 import TaskCard from "../src/components/TaskCard";
 import { Task } from "../src/types/task";
 import * as taskApi from "../src/services/taskApi";
+
+const TaskStatusChart = dynamic(
+  () => import("../src/components/TaskStatusChart"),
+  { ssr: false }
+);
+
+const PriorityChart = dynamic(
+  () => import("../src/components/PriorityChart"),
+  { ssr: false }
+);
+
 
 export default function Home() {
 
@@ -240,6 +252,16 @@ export default function Home() {
             </p>
           </div>
 
+        </div>
+
+        {/* Charts */}
+        <div className="mb-8 grid grid-cols-2 gap-6">
+          <TaskStatusChart
+            completed={analytics.completedTasks}
+            pending={analytics.pendingTasks}
+          />
+
+          <PriorityChart tasks={tasks} />
         </div>
 
         {/* Task Form */}
