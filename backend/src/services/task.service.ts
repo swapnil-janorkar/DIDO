@@ -1,4 +1,5 @@
 import { pool } from "../config/db";
+import * as streakService from "./streak.service";
 
 export const getTasks = async (userId: number) => {
     const r = await pool.query(
@@ -66,6 +67,8 @@ export const completeTask = async (id: number, userId: number) => {
     );
 
     if (r.rowCount === 0) return null;
+
+    await streakService.updateStreak(userId);
 
     return r.rows[0];
 };

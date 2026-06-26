@@ -4,6 +4,7 @@ import { pool } from "./config/db";
 import taskRoutes from "./routes/task.routes";
 import authRoutes from "./auth/auth.routes";
 import analyticsRoutes from "./routes/analytics.routes";
+import streakRoutes from "./routes/streak.routes";
 
 const app = express();
 
@@ -30,5 +31,6 @@ app.get("/", async (_, res) => {
 app.use("/tasks", taskRoutes);
 app.use("/auth", authRoutes);
 app.use("/analytics", analyticsRoutes);
+app.use("/streak", streakRoutes);
 
 export default app;

@@ -3,7 +3,10 @@ CREATE TABLE IF NOT EXISTS users(
     name VARCHAR(100) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     password_hash TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    current_streak INTEGER DEFAULT 0,
+    longest_streak INTEGER DEFAULT 0,
+    last_activity_date DATE
 );
 
 CREATE TABLE IF NOT EXISTS tasks(
@@ -24,3 +27,8 @@ CREATE TABLE IF NOT EXISTS tasks(
 ALTER TABLE tasks ADD COLUMN IF NOT EXISTS due_date DATE;
 ALTER TABLE tasks ADD COLUMN IF NOT EXISTS category VARCHAR(50);
 ALTER TABLE tasks ADD COLUMN IF NOT EXISTS estimated_duration INTEGER;
+
+-- Streak / activity tracking columns (added in Step 1 of streaks feature).
+ALTER TABLE users ADD COLUMN IF NOT EXISTS current_streak INTEGER DEFAULT 0;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS longest_streak INTEGER DEFAULT 0;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS last_activity_date DATE;
