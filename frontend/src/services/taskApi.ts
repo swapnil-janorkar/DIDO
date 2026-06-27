@@ -112,3 +112,14 @@ export const updateTask = async (
 
     return r.json();
 };
+
+export const getAchievements = async () => {
+    const r = await fetch(
+        "http://localhost:5000/achievements",
+        {
+            headers: authHeaders()
+        }
+    );
+
+    return r.json();
+};

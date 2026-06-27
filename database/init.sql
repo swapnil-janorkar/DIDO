@@ -32,3 +32,41 @@ ALTER TABLE tasks ADD COLUMN IF NOT EXISTS estimated_duration INTEGER;
 ALTER TABLE users ADD COLUMN IF NOT EXISTS current_streak INTEGER DEFAULT 0;
 ALTER TABLE users ADD COLUMN IF NOT EXISTS longest_streak INTEGER DEFAULT 0;
 ALTER TABLE users ADD COLUMN IF NOT EXISTS last_activity_date DATE;
+
+-- ── Achievements ────────────────────────────────────────────────────────────
+-- Stores the catalogue of every possible achievement badge.
+-- name is UNIQUE so ON CONFLICT (name) DO NOTHING makes reseeding safe.
+CREATE TABLE IF NOT EXISTS achievements(
+    id          SERIAL PRIMARY KEY,
+    name        VARCHAR(100) UNIQUE NOT NULL,
+    description TEXT,
+    badge       VARCHAR(20) NOT NULL
+);
+
+-- ── User Achievements ────────────────────────────────────────────────────────
+-- Junction table that records which achievements each user has unlocked.
+-- ON DELETE CASCADE keeps it tidy when a user account is removed.
+-- UNIQUE(user_id, achievement_id) prevents duplicate unlocks.
+CREATE TABLE IF NOT EXISTS user_achievements(
+    id             SERIAL PRIMARY KEY,
+    user_id        INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    achievement_id INTEGER NOT NULL REFERENCES achievements(id) ON DELETE CASCADE,
+    unlocked_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(user_id, achievement_id)
+);
+
+-- ── Seed Achievements ────────────────────────────────────────────────────────
+-- Covers all milestone categories we'll track:
+--   Tasks Completed → First Task, 10 Tasks, 50 Tasks, 100 Tasks
+--   Streaks         → 7 Day Streak, 30 Day Streak
+--   Analytics       → Perfect Week
+INSERT INTO achievements(name, description, badge)
+VALUES
+    ('First Task',    'Complete your first task',              '🥇'),
+    ('10 Tasks',      'Complete 10 tasks',                     '🏅'),
+    ('50 Tasks',      'Complete 50 tasks',                     '🏆'),
+    ('100 Tasks',     'Complete 100 tasks',                    '⭐'),
+    ('7 Day Streak',  'Maintain a 7 day streak',               '🔥'),
+    ('30 Day Streak', 'Maintain a 30 day streak',              '💎'),
+    ('Perfect Week',  'Complete every planned task this week', '🎯')
+ON CONFLICT (name) DO NOTHING;

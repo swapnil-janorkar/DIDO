@@ -5,6 +5,7 @@ import taskRoutes from "./routes/task.routes";
 import authRoutes from "./auth/auth.routes";
 import analyticsRoutes from "./routes/analytics.routes";
 import streakRoutes from "./routes/streak.routes";
+import achievementRoutes from "./routes/achievement.routes";
 
 const app = express();
 
@@ -32,5 +33,6 @@ app.use("/tasks", taskRoutes);
 app.use("/auth", authRoutes);
 app.use("/analytics", analyticsRoutes);
 app.use("/streak", streakRoutes);
+app.use("/achievements", achievementRoutes);
 
 export default app;

@@ -1,4 +1,5 @@
 import { pool } from "../config/db";
+import * as achievementService from "./achievement.service";
 
 export const updateStreak = async (userId: number) => {
 
@@ -51,6 +52,10 @@ export const updateStreak = async (userId: number) => {
          WHERE id = $4`,
         [user.current_streak, user.longest_streak, todayString, userId]
     );
+
+    // Check streak-based achievements after every streak update.
+    // Placing this here means any future streak source benefits automatically.
+    await achievementService.checkStreakAchievements(userId);
 };
 
 export const getStreak = async (userId: number) => {

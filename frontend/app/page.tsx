@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import TaskForm from "../src/components/TaskForm";
 import TaskCard from "../src/components/TaskCard";
 import { Task } from "../src/types/task";
+import { Achievement } from "../src/types/achievement";
 import * as taskApi from "../src/services/taskApi";
 
 const TaskStatusChart = dynamic(
@@ -51,6 +52,9 @@ export default function Home() {
   // Sort state
   const [sortBy, setSortBy] = useState("CREATED");
 
+  // Achievements state
+  const [achievements, setAchievements] = useState<Achievement[]>([]);
+
   // Edit state
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [editForm, setEditForm] = useState({
@@ -67,6 +71,7 @@ export default function Home() {
     setTasks(Array.isArray(data) ? data : []);
     await loadAnalytics();
     await loadWeeklyAnalytics();
+    await loadAchievements();
   };
 
   const loadAnalytics = async () => {
@@ -77,6 +82,11 @@ export default function Home() {
   const loadWeeklyAnalytics = async () => {
     const data = await taskApi.getWeeklyAnalytics();
     setWeeklyAnalytics(data);
+  };
+
+  const loadAchievements = async () => {
+    const data = await taskApi.getAchievements();
+    setAchievements(Array.isArray(data) ? data : []);
   };
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -262,6 +272,33 @@ export default function Home() {
           />
 
           <PriorityChart tasks={tasks} />
+        </div>
+
+        {/* Achievements */}
+        <div className="mb-8 rounded-xl bg-white p-6 shadow">
+          <h2 className="mb-4 text-2xl font-semibold">🏅 Achievements</h2>
+
+          <div className="space-y-3">
+            {achievements.length === 0 ? (
+              <p className="text-sm text-zinc-500">No achievements unlocked yet.</p>
+            ) : (
+              achievements.map(achievement => (
+                <div
+                  key={achievement.name}
+                  className="flex items-start gap-4 rounded-lg border p-3"
+                >
+                  <div className="text-3xl">{achievement.badge}</div>
+                  <div>
+                    <div className="font-semibold">{achievement.name}</div>
+                    <div className="text-sm text-gray-500">{achievement.description}</div>
+                    <div className="mt-1 text-xs text-zinc-400">
+                      Unlocked {new Date(achievement.unlocked_at).toLocaleDateString()}
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
         </div>
 
         {/* Task Form */}

@@ -1,5 +1,6 @@
 import { pool } from "../config/db";
 import * as streakService from "./streak.service";
+import * as achievementService from "./achievement.service";
 
 export const getTasks = async (userId: number) => {
     const r = await pool.query(
@@ -69,6 +70,7 @@ export const completeTask = async (id: number, userId: number) => {
     if (r.rowCount === 0) return null;
 
     await streakService.updateStreak(userId);
+    await achievementService.checkTaskAchievements(userId);
 
     return r.rows[0];
 };
