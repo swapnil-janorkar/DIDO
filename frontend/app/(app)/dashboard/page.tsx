@@ -1,27 +1,25 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
-import TaskForm from "../../src/components/TaskForm";
-import TaskCard from "../../src/components/TaskCard";
-import { Task } from "../../src/types/task";
-import { Achievement } from "../../src/types/achievement";
-import * as taskApi from "../../src/services/taskApi";
+import TaskForm from "@/src/components/TaskForm";
+import TaskCard from "@/src/components/TaskCard";
+import { Task } from "@/src/types/task";
+import { Achievement } from "@/src/types/achievement";
+import * as taskApi from "@/src/services/taskApi";
 
 const TaskStatusChart = dynamic(
-  () => import("../../src/components/TaskStatusChart"),
+  () => import("@/src/components/TaskStatusChart"),
   { ssr: false }
 );
 
 const PriorityChart = dynamic(
-  () => import("../../src/components/PriorityChart"),
+  () => import("@/src/components/PriorityChart"),
   { ssr: false }
 );
 
 export default function DashboardPage() {
 
-  const router = useRouter();
 
   const [token, setToken] = useState("");
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -119,15 +117,14 @@ export default function DashboardPage() {
   };
 
   useEffect(() => {
+
     const saved = localStorage.getItem("token");
 
-    if (!saved) {
-      router.replace("/login");
-      return;
+    if (saved) {
+        setToken(saved);
+        loadTasks();
     }
 
-    setToken(saved);
-    loadTasks();
   }, []);
 
   return (
@@ -136,17 +133,8 @@ export default function DashboardPage() {
       <div className="mx-auto max-w-5xl">
 
         {/* Header */}
-        <div className="mb-8 flex items-center justify-between">
+        <div className="mb-8">
           <h1 className="text-4xl font-bold">DIDO Dashboard</h1>
-
-          <button
-            className="rounded bg-zinc-800 px-4 py-2 text-sm text-white"
-            onClick={() => {
-              localStorage.removeItem("token");
-            }}
-          >
-            Logout
-          </button>
         </div>
 
         {/* Productivity Analytics */}
